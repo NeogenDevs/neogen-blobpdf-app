@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "app",
+  "name": "Azure Blob SAS Downloader",
+  "id": "neogen-azure-blob-sas-downloader-app",
+  "backend": true,
+  "executable": "neogen-azure-blob-sas-downloader-app",
+  "info": {
+    "description": "Generate short-lived SAS download links for PDF blobs based on an input id.",
+    "author": { "name": "Neogen" },
+    "keywords": ["azure", "blob", "sas"],
+    "version": "0.1.0",
+    "updated": "2026-02-19"
+  },
+  "includes": [
+    {
+      "type": "page",
+      "name": "Download PDF",
+      "path": "/a/neogen-azure-blob-sas-downloader-app/download",
+      "addToNav": true,
+      "defaultNav": true,
+      "role": "Viewer"
+    }
+  ],
+  "dependencies": {
+    "grafanaDependency": ">=10.0.0",
+    "plugins": []
+  }
+}
