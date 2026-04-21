@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "private",
+  "signedByOrg": "neogen",
+  "signedByOrgName": "Neogen",
+  "rootUrls": [
+    "https://neogen.grafana.net/"
+  ],
+  "plugin": "neogen-blobpdf-app",
+  "version": "0.1.0",
+  "time": 1776774043585,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "module.js": "ab4172ef382f915c8ce197dd8e7e3036d5304f5e9be65c09cdf3c424f4dfb155",
+    "go_plugin_build_manifest": "d7fac07b4bd06df9bd456d03e9fda4695a33fa72a611fd7ee797b42c27b84077",
+    "LICENSE": "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851",
+    "module.js.map": "d6a2e536911d86bbb84baf02c5f133d1289df30805d350a6fdea4b3cd3687c5a",
+    "567.js": "3069e5c899842b616f565124c38fd1672c040ff91e2e50a0270fe3bb31bacf49",
+    "neogen-blobpdf-app_linux_arm64": "ce5fa8670c4abca056fd5421ac1fa4e8d2b2b9c9893d5c0283ca4b27501593d1",
+    "neogen-blobpdf-app_darwin_arm64": "7a920ab6a1c8a417913fa398d85e4ab2a311048e809147f956d107082accf9f6",
+    "img/logo.svg": "1defc6f7e585c67657bcfd8fddc599ee7dfa82f8674413f49fa274c2cd453ec6",
+    "neogen-blobpdf-app_windows_amd64.exe": "edb3ee263f98f1b0eca5c548cbd5f18d2347ab70302b504f99004bed23d0994f",
+    "README.md": "1b25214610cf48a664bfca0eb2e413b1a6ba3b940e9a947c5111ede14820ba91",
+    "neogen-blobpdf-app_darwin_amd64": "fe6e4b8d6de20baa5efab5de85701ba78cc0b86bff1c2341dd91c34ad7a08913",
+    "202.js.map": "2e43186e057e94589bd0f9a5bd8c486318a88222c0a27b2f7c3384ad62f2ed89",
+    "202.js": "a8eae0ed5ad0acf72f1b976f2820c2e9ea6252b8287dd762b0aebdc2343f4c39",
+    "plugin.json": "42d3286220149b9e598360cc47e0a6dc8b55624ab6800a412ab60e303f077791",
+    "CHANGELOG.md": "aaa78be4710ef41d56ddab1edbd180ef9f9adfea2f293109aae925dc33a1b9b3",
+    "567.js.map": "db38f4781508958ec29cd6f7f916128f05dbbb8b090df4396fe0b9e578c4cbae",
+    "neogen-blobpdf-app_linux_arm": "f0e04bc84e0c64bd4d756a9837aa00eb1446c418d9f8a28ed6537c6e80c219ee",
+    "neogen-blobpdf-app_linux_amd64": "47e38c2c64a3d17fb3774d8185aa5062e3e9a8a77238b708756b2c7fd6badcef"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+
+wsA/BAETCgBtBYJp52ubCRB+TQxqcIhm50UUAAAAAAAcACBzYWx0QG5vdGF0
+aW9ucy5vcGVucGdwanMub3JnnZjNHGAwg7TDEzJO8vaCP1oz4LYa2pvF5Maz
+cCO62B8WIQTzOyW2kQdOhGNlcPN+TQxqcIhm5wAAuwECCQGY6r3zqxFZUZ0l
+M+sCFSP/drRlfpaEwhfmoaYw1pMFWFeFw4HlEJU330lju0W8uG1b17cbhJ1x
+lBoFwdOAdLSGwgIJAZ7OBa1RxJZPOG8j/NBo7Yhid1NFbXMOQCVNDQXcCbJn
+jTujialKNGaDVlsQsWRynXHQj32kug29Ztl0sXHD5Bw3
+=x7K3
+-----END PGP SIGNATURE-----
