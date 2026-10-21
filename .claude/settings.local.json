@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:grafana.com)",
       "WebSearch",
-      "Bash(ls /home/jdionisio/blob_pdf_plugin/neogen-blobpdf-app/Magefile*)"
+      "Bash(ls /home/jdionisio/blob_pdf_plugin/neogen-blobpdf-app/Magefile*)",
+      "Bash(npm run *)"
     ]
   }
 }

@@ -1,50 +1,61 @@
-<!-- This README file is going to be the one displayed on the Grafana.com website for your plugin. Uncomment and replace the content here before publishing.
+# Azure Blob SAS Downloader
 
-Remove any remaining comments before publishing as these may be displayed on Grafana.com -->
+A Grafana app plugin that lets users download PDF documents from Azure Blob Storage without ever handling
+storage credentials. An administrator registers one or more storage accounts in the plugin configuration,
+and users then pick an account, enter a document UUID, and get a short-lived
+[SAS](https://learn.microsoft.com/azure/storage/common/storage-sas-overview) download link.
 
-# Blob_pdf
+## Overview
 
-<!-- To help maximize the impact of your README and improve usability for users, we propose the following loose structure:
+Documents are stored in Azure Blob Storage with a UUID suffix in the blob name (for example
+`invoice_196e554f-bf3d-4ace-b2bd-0d5c2f2e8109.pdf`). Users only know the UUID, not the full blob name.
 
-**BEFORE YOU BEGIN**
-- Ensure all links are absolute URLs so that they will work when the README is displayed within Grafana and Grafana.com
-- Be inspired ✨
-  - [grafana-polystat-panel](https://github.com/grafana/grafana-polystat-panel)
-  - [volkovlabs-variable-panel](https://github.com/volkovlabs/volkovlabs-variable-panel)
+Given an account and a UUID, the plugin:
 
-**ADD SOME BADGES**
+1. Lists the blobs in the configured container (optionally restricted to a blob prefix).
+2. Finds the most recent blob whose name ends with that UUID.
+3. Signs a read-only SAS URL for it in the backend and returns it to the browser.
 
-Badges convey useful information at a glance for users whether in the Catalog or viewing the source code. You can use the generator on [Shields.io](https://shields.io/badges/dynamic-json-badge) together with the Grafana.com API
-to create dynamic badges that update automatically when you publish a new version to the marketplace.
-
-- For the URL parameter use `https://grafana.com/api/plugins/your-plugin-id`.
-- Example queries:
-  - Downloads: `$.downloads`
-  - Catalog Version: `$.version`
-  - Grafana Dependency: `$.grafanaDependency`
-  - Signature Type: `$.versionSignatureType`
-- Optionally, for the logo parameter use `grafana`.
-
-Full example: ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?logo=grafana&query=$.version&url=https://grafana.com/api/plugins/grafana-polystat-panel&label=Marketplace&prefix=v&color=F47A20)
-
-Consider other [badges](https://shields.io/badges) as you feel appropriate for your project.
-
-## Overview / Introduction
-Provide one or more paragraphs as an introduction to your plugin to help users understand why they should use it.
-
-Consider including screenshots:
-- in [plugin.json](https://grafana.com/developers/plugin-tools/reference/plugin-json#info) include them as relative links.
-- in the README ensure they are absolute URLs.
+Account keys are stored in Grafana's `secureJsonData` and never leave the backend. The generated SAS URL is
+read-only and expires after a configurable number of minutes.
 
 ## Requirements
-List any requirements or dependencies they may need to run the plugin.
 
-## Getting Started
-Provide a quick start on how to configure and use the plugin.
+- Grafana 10.0.0 or later.
+- One or more Azure Blob Storage accounts, each with a storage account key.
+- Network access from the Grafana backend to the storage account endpoint.
+- Grafana `Admin` role to configure storage accounts; `Viewer` or above to download documents.
+
+## Getting started
+
+1. Install the plugin and enable it from **Administration → Plugins**.
+2. Open the plugin's **Configuration** tab and add a storage account:
+
+   | Field            | Description                                                             |
+   | ---------------- | ----------------------------------------------------------------------- |
+   | Name             | Display name shown to users in the account picker.                      |
+   | Account name     | Azure storage account name.                                             |
+   | Account key      | Storage account key. Stored encrypted and write-only.                   |
+   | Container name   | Container holding the documents.                                        |
+   | Endpoint suffix  | Usually `blob.core.windows.net`.                                        |
+   | Blob prefix      | Optional prefix to narrow the search within the container.              |
+   | Expiry (minutes) | How long a generated download link stays valid.                         |
+
+3. Save the configuration, then open **Download PDF** from the navigation menu.
+4. Select a storage account, enter the document UUID, and select **Generate download link**.
+
+Repeat step 2 for each additional storage account you want to expose.
 
 ## Documentation
-If your project has dedicated documentation available for users, provide links here. For help in following Grafana's style recommendations for technical documentation, refer to our [Writer's Toolkit](https://grafana.com/docs/writers-toolkit/).
+
+Source code, issue tracker, and further documentation are available at
+[github.com/NeogenDevs/neogen-blobpdf-app](https://github.com/NeogenDevs/neogen-blobpdf-app).
 
 ## Contributing
-Do you want folks to contribute to the plugin or provide feedback through specific means? If so, tell them how!
--->
+
+Bug reports and pull requests are welcome via
+[GitHub issues](https://github.com/NeogenDevs/neogen-blobpdf-app/issues).
+
+## License
+
+Licensed under the [Apache License 2.0](https://github.com/NeogenDevs/neogen-blobpdf-app/blob/main/LICENSE).

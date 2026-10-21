@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { PluginType } from '@grafana/data';
 import AppConfig, { AppConfigProps } from './AppConfig';
-import { testIds } from 'components/testIds';
 
 describe('Components/AppConfig', () => {
   let props: AppConfigProps;
@@ -10,29 +9,63 @@ describe('Components/AppConfig', () => {
   beforeEach(() => {
     jest.resetAllMocks();
 
+    // jsdom does not implement scrollIntoView, which the account form calls when it opens.
+    Element.prototype.scrollIntoView = jest.fn();
+
     props = {
       plugin: {
         meta: {
-          id: 'sample-app',
-          name: 'Sample App',
+          id: 'neogentest-blobpdf-app',
+          name: 'Azure Blob SAS Downloader',
           type: PluginType.app,
           enabled: true,
           jsonData: {},
         },
       },
-      query: {},
     } as unknown as AppConfigProps;
   });
 
-  test('renders the "API Settings" fieldset with API key, API url inputs and button', () => {
-    const plugin = { meta: { ...props.plugin.meta, enabled: false } };
+  test('renders the storage accounts section with an empty state', () => {
+    render(<AppConfig plugin={props.plugin} />);
 
-    // @ts-ignore - We don't need to provide `addConfigPage()` and `setChannelSupport()` for these tests
-    render(<AppConfig plugin={plugin} query={props.query} />);
+    expect(screen.getByText('Storage Accounts')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add account/i })).toBeInTheDocument();
+    expect(screen.getByText(/no storage accounts configured yet/i)).toBeInTheDocument();
+  });
 
-    expect(screen.queryByRole('group', { name: /api settings/i })).toBeInTheDocument();
-    expect(screen.queryByTestId(testIds.appConfig.apiKey)).toBeInTheDocument();
-    expect(screen.queryByTestId(testIds.appConfig.apiUrl)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /save api settings/i })).toBeInTheDocument();
+  test('lists the configured storage accounts', () => {
+    const plugin = {
+      meta: {
+        ...props.plugin.meta,
+        jsonData: {
+          accounts: [
+            {
+              id: 'account-1',
+              name: 'Production EU',
+              accountName: 'mystorageaccount',
+              containerName: 'pdfs',
+            },
+          ],
+        },
+      },
+    };
+
+    render(<AppConfig plugin={plugin} />);
+
+    expect(screen.getByText('Production EU')).toBeInTheDocument();
+    expect(screen.getByText(/mystorageaccount \/ pdfs/)).toBeInTheDocument();
+    expect(screen.queryByText(/no storage accounts configured yet/i)).not.toBeInTheDocument();
+  });
+
+  test('opens the account form with the storage account fields', () => {
+    render(<AppConfig plugin={props.plugin} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /add account/i }));
+
+    expect(screen.getByText('Add storage account')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('e.g., Production EU')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('e.g., mystorageaccount')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('e.g., pdfs')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Paste account key')).toBeInTheDocument();
   });
 });

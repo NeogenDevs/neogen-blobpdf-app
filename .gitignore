@@ -33,6 +33,18 @@ artifacts/
 work/
 ci/
 
+# Packaged plugin archives and stray build output at the repo root
+/neogentest-blobpdf-app/
+/neogentest-blobpdf-app*.zip
+/module.js
+/module.js.map
+/[0-9]*.js
+/[0-9]*.js.map
+/plugin.json
+/go_plugin_build_manifest
+/neogentest-blobpdf-app_*
+/MANIFEST.txt
+
 # e2e test directories
 /test-results/
 /playwright-report/
@@ -44,3 +56,7 @@ ci/
 .idea
 
 .eslintcache
+
+# Tool caches — must not live under the Go module root, or mage hashes stray
+# .go files from them into go_plugin_build_manifest
+.cache/

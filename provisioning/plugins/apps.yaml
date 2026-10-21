@@ -1,11 +1,21 @@
 apiVersion: 1
 
 apps:
-  - type: 'neogen-azure-blob-sas-downloader-app'
+  - type: 'neogentest-blobpdf-app'
     org_id: 1
-    org_name: 'neogen'
     disabled: false
-    jsonData:
-      apiUrl: http://default-url.com
-    secureJsonData:
-      apiKey: secret-key
+    # Uncomment and fill in to pre-configure a storage account, so the download
+    # page is usable immediately after `docker compose up` with no manual setup.
+    # The secret key is keyed by "accountKey_<account id>".
+    #
+    # jsonData:
+    #   accounts:
+    #     - id: 'test-account'
+    #       name: 'Test Account'
+    #       accountName: '<azure storage account name>'
+    #       containerName: '<container holding the PDFs>'
+    #       endpointSuffix: 'blob.core.windows.net'
+    #       blobPrefix: ''
+    #       expiryMinutes: 15
+    # secureJsonData:
+    #   accountKey_test-account: '<azure storage account key>'

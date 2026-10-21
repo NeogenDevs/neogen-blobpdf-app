@@ -48,24 +48,31 @@ func TestCallResource(t *testing.T) {
 		expBody   []byte
 	}{
 		{
-			name:      "get ping 200",
+			name:      "get generate-sas 405",
 			method:    http.MethodGet,
-			path:      "ping",
-			expStatus: http.StatusOK,
-		},
-		{
-			name:      "get echo 405",
-			method:    http.MethodGet,
-			path:      "echo",
+			path:      "generate-sas",
 			expStatus: http.StatusMethodNotAllowed,
 		},
 		{
-			name:      "post echo 200",
+			name:      "post generate-sas invalid body 400",
 			method:    http.MethodPost,
-			path:      "echo",
-			body:      []byte(`{"message":"ok"}`),
-			expStatus: http.StatusOK,
-			expBody:   []byte(`{"message":"ok"}`),
+			path:      "generate-sas",
+			body:      []byte(`not json`),
+			expStatus: http.StatusBadRequest,
+		},
+		{
+			name:      "post generate-sas missing accountId 400",
+			method:    http.MethodPost,
+			path:      "generate-sas",
+			body:      []byte(`{"id":"196e554f-bf3d-4ace-b2bd-0d5c2f2e8109"}`),
+			expStatus: http.StatusBadRequest,
+		},
+		{
+			name:      "post generate-sas missing id 400",
+			method:    http.MethodPost,
+			path:      "generate-sas",
+			body:      []byte(`{"accountId":"account-1"}`),
+			expStatus: http.StatusBadRequest,
 		},
 		{
 			name:      "get non existing handler 404",

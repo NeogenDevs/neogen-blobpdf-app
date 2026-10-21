@@ -109,6 +109,10 @@ jobs:
         id: package-plugin
         run: |
           mv dist ${PLUGIN_ID}
+          # The plugin validator requires backend binaries to be exactly 0755.
+          if compgen -G "${PLUGIN_ID}/gpx_*" > /dev/null; then
+            chmod 0755 ${PLUGIN_ID}/gpx_*
+          fi
           zip ${ARCHIVE} ${PLUGIN_ID} -r
         env:
           ARCHIVE: ${{ steps.metadata.outputs.archive }}

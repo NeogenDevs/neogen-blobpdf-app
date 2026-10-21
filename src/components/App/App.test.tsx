@@ -11,10 +11,10 @@ describe('Components/App', () => {
     jest.resetAllMocks();
 
     props = {
-      basename: 'a/sample-app',
+      basename: 'a/neogentest-blobpdf-app',
       meta: {
-        id: 'sample-app',
-        name: 'Sample App',
+        id: 'neogentest-blobpdf-app',
+        name: 'Azure Blob SAS Downloader',
         type: PluginType.app,
         enabled: true,
         jsonData: {},
@@ -25,7 +25,7 @@ describe('Components/App', () => {
     } as unknown as AppRootProps;
   });
 
-  test('renders without an error"', async () => {
+  test('redirects to the download page and renders it', async () => {
     const { queryByText } = render(
       <MemoryRouter>
         <App {...props} />
@@ -33,6 +33,16 @@ describe('Components/App', () => {
     );
 
     // Application is lazy loaded, so we need to wait for the component and routes to be rendered
-    await waitFor(() => expect(queryByText(/this is page one./i)).toBeInTheDocument(), { timeout: 2000 });
+    await waitFor(() => expect(queryByText(/azure blob pdf download/i)).toBeInTheDocument(), { timeout: 2000 });
+  });
+
+  test('prompts for configuration when no storage accounts are configured', async () => {
+    const { queryByText } = render(
+      <MemoryRouter>
+        <App {...props} />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => expect(queryByText(/no storage accounts configured/i)).toBeInTheDocument(), { timeout: 2000 });
   });
 });

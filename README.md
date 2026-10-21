@@ -1,50 +1,63 @@
-<!-- This README file is going to be the one displayed on the Grafana.com website for your plugin. Uncomment and replace the content here before publishing.
+# Azure Blob SAS Downloader (neogentest-blobpdf-app)
 
-Remove any remaining comments before publishing as these may be displayed on Grafana.com -->
+Grafana app plugin that generates short-lived Azure Blob Storage SAS download links for PDF documents, looked
+up by the UUID suffix in the blob name.
 
-# Blob_pdf
+For user-facing documentation (the text published to grafana.com), see [src/README.md](src/README.md).
 
-<!-- To help maximize the impact of your README and improve usability for users, we propose the following loose structure:
+## Plugin identity
 
-**BEFORE YOU BEGIN**
-- Ensure all links are absolute URLs so that they will work when the README is displayed within Grafana and Grafana.com
-- Be inspired ✨
-  - [grafana-polystat-panel](https://github.com/grafana/grafana-polystat-panel)
-  - [volkovlabs-variable-panel](https://github.com/volkovlabs/volkovlabs-variable-panel)
+| Field     | Value                      |
+| --------- | -------------------------- |
+| Plugin ID | `neogentest-blobpdf-app`   |
+| Type      | `app`                      |
+| Org slug  | `neogentest`               |
 
-**ADD SOME BADGES**
+The plugin ID must stay prefixed with the grafana.com organization slug (`neogentest`) — Grafana rejects a
+signature whose access policy token was issued by an account that does not match the first part of the plugin
+ID. Changing the ID requires a Grafana server restart and reinstall for any existing deployment.
 
-Badges convey useful information at a glance for users whether in the Catalog or viewing the source code. You can use the generator on [Shields.io](https://shields.io/badges/dynamic-json-badge) together with the Grafana.com API
-to create dynamic badges that update automatically when you publish a new version to the marketplace.
+## Development
 
-- For the URL parameter use `https://grafana.com/api/plugins/your-plugin-id`.
-- Example queries:
-  - Downloads: `$.downloads`
-  - Catalog Version: `$.version`
-  - Grafana Dependency: `$.grafanaDependency`
-  - Signature Type: `$.versionSignatureType`
-- Optionally, for the logo parameter use `grafana`.
+```sh
+npm install
+npm run dev          # frontend watch build
+mage -v build:linux  # backend build
+npm run server       # Grafana in Docker at http://localhost:3000
+```
 
-Full example: ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?logo=grafana&query=$.version&url=https://grafana.com/api/plugins/grafana-polystat-panel&label=Marketplace&prefix=v&color=F47A20)
+Other useful targets: `npm run typecheck`, `npm run lint`, `npm run test:ci`, `npm run e2e`.
 
-Consider other [badges](https://shields.io/badges) as you feel appropriate for your project.
+Note that any change to `src/plugin.json` requires restarting the Grafana server.
 
-## Overview / Introduction
-Provide one or more paragraphs as an introduction to your plugin to help users understand why they should use it.
+## Signing and release
 
-Consider including screenshots:
-- in [plugin.json](https://grafana.com/developers/plugin-tools/reference/plugin-json#info) include them as relative links.
-- in the README ensure they are absolute URLs.
+Signing requires an access policy token created under the **neogentest** organization on grafana.com, with the
+realm set to `neogentest (all-stacks)` and the `plugins:write` scope:
 
-## Requirements
-List any requirements or dependencies they may need to run the plugin.
+```sh
+export GRAFANA_ACCESS_POLICY_TOKEN=<token>
+npm run build
+mage -v buildAll
+npm run sign
+```
 
-## Getting Started
-Provide a quick start on how to configure and use the plugin.
+In CI, store the token as the `GRAFANA_ACCESS_POLICY_TOKEN` repository secret. The `CI` workflow signs the
+build when that secret is present, and the `Release` workflow packages a signed archive on `v*` tags once the
+`policy_token` input is enabled in [.github/workflows/release.yml](.github/workflows/release.yml).
 
-## Documentation
-If your project has dedicated documentation available for users, provide links here. For help in following Grafana's style recommendations for technical documentation, refer to our [Writer's Toolkit](https://grafana.com/docs/writers-toolkit/).
+The packaged archive must contain a single top-level directory named exactly `neogentest-blobpdf-app`, and
+backend binaries inside it must have `0755` permissions.
 
-## Contributing
-Do you want folks to contribute to the plugin or provide feedback through specific means? If so, tell them how!
--->
+## Before submitting to the catalog
+
+Validate the archive locally with `npx @grafana/plugin-validator@latest <archive>.zip`. Two warnings are
+outstanding:
+
+- **Screenshots** — `info.screenshots` is not set. Add at least one image under `src/img/` and reference it
+  from `src/plugin.json` (relative path), otherwise the catalog listing has no preview.
+- **Unsigned plugin** — expected for a first submission; Grafana signs the plugin after review.
+
+## License
+
+[Apache License 2.0](LICENSE)

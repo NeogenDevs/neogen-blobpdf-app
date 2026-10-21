@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	const pluginID = "neogen-blobpdf-app"
+	const pluginID = "neogentest-blobpdf-app"
 
 	if err := app.Manage(pluginID, plugin.NewApp, app.ManageOpts{}); err != nil {
 		log.DefaultLogger.Error("failed to start app", "error", err)
